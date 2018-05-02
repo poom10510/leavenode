@@ -9,8 +9,6 @@ var schema = new Schema({
     type: String,
     status: String,
     detail: String,
-    user: { type: ObjectId, ref: 'User' },
-    task: { type: ObjectId, ref: 'Task' },
     deleted: { type: Boolean, default: false, select: false }
 })
 

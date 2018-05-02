@@ -7,8 +7,6 @@ const availableFields = ['type', 'status', 'detail']
 const schema = Joi.object().keys({
     type: Joi.string(),
     status: Joi.string(),
-    user: Joi.string(),
-    task: Joi.string(),
     detail: Joi.string().optional()
 })
 

@@ -10,8 +10,8 @@ var schema = new Schema({
     password: String,
     picture: String,
     role: String,
-    department: { type: ObjectId, ref: 'Task' },
-    task: [{ type: ObjectId, ref: 'Task' }],
+    department: { type: ObjectId, ref: 'Department' },
+    tasks: [{ type: ObjectId, ref: 'Task' }],
     contact: Object,
     deleted: { type: Boolean, default: false, select: false }
 })

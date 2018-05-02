@@ -3,7 +3,7 @@ import Joi from 'joi'
 import { respondResult, respondSuccess, respondErrors } from '../utils'
 import User from '../models/user'
 
-const availableFields = ['firstname', 'lastname', 'username', 'password', 'picture', 'role', 'department', 'task', 'contact']
+const availableFields = ['firstname', 'lastname', 'username', 'password', 'picture', 'role', 'department', 'tasks', 'contact']
 const schema = Joi.object().keys({
     firstname: Joi.string(),
     lastname: Joi.string(),
@@ -12,7 +12,7 @@ const schema = Joi.object().keys({
     picture: Joi.string().optional(),
     role: Joi.string(),
     department: Joi.string(),
-    task: Joi.array().items(Joi.string()),
+    tasks: Joi.array().items(Joi.string()),
     contact: Joi.object().optional()
 })
 
