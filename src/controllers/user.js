@@ -1,6 +1,7 @@
 import _ from 'lodash'
 import Joi from 'joi'
 import { respondResult, respondSuccess, respondErrors } from '../utils'
+import { admin } from '../utils/admin'
 import User from '../models/user'
 
 const availableFields = ['firstname', 'lastname', 'username', 'password', 'picture', 'role', 'department', 'tasks', 'contact']
@@ -26,23 +27,27 @@ export const list = async(req, res) => {
     }
 }
 
-export const findById = async(req, res) => {
-    try {
-        const { _id } = req.body
-        const users = await User.findById({ deleted: false, _id })
+// const findById = async(req, res) => {
+//     try {
+//         const { _id } = req.body
+//         const users = await User.findById({ deleted: false, _id })
 
-        respondResult(res)(users)
-    } catch (err) {
-        respondErrors(res)(err)
-    }
-}
+//         respondResult(res)(users)
+//     } catch (err) {
+//         respondErrors(res)(err)
+//     }
+// }
 
-export const findByUser = async(req, res) => {
+// export const me = async (req, res) => {
+//     const { token } = req.body
+// }
+
+export const login = async(req, res) => {
     try {
         const { username, password } = req.body
-        const users = await User.findOne({ username, password })
-
-        respondResult(res)(users)
+        const user = await User.findOne({ username, password })
+        user.token = 'xxxxx'
+        respondResult(res)(user)
     } catch (err) {
         respondErrors(res)(err)
     }
@@ -60,31 +65,38 @@ export const create = async(req, res) => {
     }
 }
 
-export const update = async(req, res) => {
+export const update = async (req, res) => {
     try {
         const _id = req.params.id
         const {...body } = req.body
-        const users = await User.findById({ _id })
+        const user = await User.findById({ _id })
         _.map(availableFields, (field) => {
             users[field] = body[field] || users[field]
         })
-        users.save()
+        user.save()
 
-        respondResult(res)(users)
+        respondResult(res)(user)
     } catch (err) {
         respondErrors(res)(err)
     }
 }
 
-export const remove = async(req, res) => {
-    try {
-        const { _id } = req.body
-        const users = await User.findById({ _id })
-        users.deleted = true
-        users.save()
 
-        respondSuccess(res)()
-    } catch (err) {
-        respondErrors(res)(err)
+export const adminLogin = async (req, res) => {
+    const { username, password } = req.body
+    if (admin.username === username && admin.password === password) {
+        admin.token = uuidV4()
+        res.status(200).send({ token: admin.token })
+        return
     }
+    res.status(401).send({ message: 'auth failed' })
+}
+
+export const adminLogout = async (req, res) => {
+    if (req.body.token === admin.token && admin.token) {
+        admin.token = null
+        res.status(200).send({ message: 'success' })
+        return
+    }
+    res.status(403).send({ message: 'forbidden' })
 }

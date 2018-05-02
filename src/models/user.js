@@ -6,10 +6,17 @@ var schema = new Schema({
     __v: { type: Number, select: false },
     firstname: String,
     lastname: String,
-    username: String,
-    password: String,
+    username: {
+        type: String,
+        unique: true
+    },
+    hash_password: {
+        type: String,
+        select: false
+    },
     picture: String,
     role: String,
+    token: String,
     department: { type: ObjectId, ref: 'Department' },
     tasks: [{ type: ObjectId, ref: 'Task' }],
     contact: Object,
