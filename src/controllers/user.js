@@ -62,7 +62,8 @@ export const create = async(req, res) => {
 
 export const update = async(req, res) => {
     try {
-        const { _id, ...body } = req.body
+        const _id = req.params.id
+        const {...body } = req.body
         const users = await User.findById({ _id })
         _.map(availableFields, (field) => {
             users[field] = body[field] || users[field]

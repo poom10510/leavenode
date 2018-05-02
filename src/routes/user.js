@@ -3,11 +3,11 @@ import { list, create, update, remove, findById, findByUser } from '../controlle
 import auth from '../middlewares/auth'
 
 const router = Router()
-router.get('/list', auth, list)
-router.post('/create', auth, create)
-router.put('/update', auth, update)
-router.delete('/delete', auth, remove)
-router.post('/find', auth, findById)
-router.post('/finduser', findByUser)
+router.get('/list', list)
+router.post('/create', create)
+router.put('/:id', update)
+router.delete('/delete', remove)
+router.post('/find', findById)
+router.post('/login', findByUser)
 
 export default router
