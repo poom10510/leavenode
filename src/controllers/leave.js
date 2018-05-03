@@ -7,7 +7,10 @@ const availableFields = ['type', 'status', 'detail']
 const schema = Joi.object().keys({
     type: Joi.string(),
     status: Joi.string(),
-    detail: Joi.string().optional()
+    detail: Joi.string().optional(),
+    user: Joi.string(),
+    substitute: Joi.string(),
+    period: Joi.string(),
 })
 
 export const list = async(req, res) => {
