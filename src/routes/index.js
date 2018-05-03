@@ -140,9 +140,13 @@ router.post('/leaves', async (req, res) => {
     const leave = await MODELS.Leave.create(departmentData)
     res.status(200).send(leave)
 })
-router.put('/leaves', async (req, res) => {
-    const { _id, ...leaveData } = req.body
-    const leave = await MODELS.Leave.update({ _id }, leaveData)
+router.post('/leaves/update', async (req, res) => {
+    const { _id, ...userData } = req.body
+    const leave = await MODELS.Leave.findById({ _id })
+    _.map(leaveData, (value, field) => {
+        leave[field] = value
+    })
+    leave.save()
     res.status(200).send(leave)
 })
 
