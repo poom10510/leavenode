@@ -2,6 +2,7 @@ import { Router } from 'express'
 import * as MODELS from '../models'
 import bcrypt from 'bcrypt'
 import uuidV4 from 'uuid/v4'
+import _ from 'lodash'
 
 const router = Router()
 router.get('/', (req, res) => {
@@ -16,7 +17,7 @@ router.get('/users', async (req, res) => {
 
 router.post('/users', async (req, res) => {
     const { password, ...userData } = req.body
-    const hash_password = bcrypt.hashSync(password, UserData.username.length)
+    const hash_password = bcrypt.hashSync(password, userData.username.length)
     const user = await MODELS.User.create({
         ...userData,
         hash_password
@@ -24,9 +25,13 @@ router.post('/users', async (req, res) => {
     res.status(200).send(user)
 })
 
-router.put('/users/:id', async (req, res) => {
-    const userData = req.body
-    const user = await MODELS.User.update({ _id: userData._id }, userData)
+router.post('/users/update', async (req, res) => {
+    const { _id, ...userData } = req.body
+    const user = await MODELS.User.findById({ _id })
+    _.map(userData, (value, field) => {
+        user[field] = value
+    })
+    user.save()
     res.status(200).send(user)
 })
 
