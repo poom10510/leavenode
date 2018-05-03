@@ -11,7 +11,7 @@ var schema = new Schema({
     detail: String,
     user: { type: ObjectId, ref: 'User' },
     substitute: { type: ObjectId, ref: 'User' },
-    period: Object,
+    period: Date,
     deleted: { type: Boolean, default: false, select: false }
 })
 
