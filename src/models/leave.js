@@ -9,6 +9,9 @@ var schema = new Schema({
     type: String,
     status: String,
     detail: String,
+    user: { type: ObjectId, ref: 'User' },
+    substitute: { type: ObjectId, ref: 'User' },
+    period: Object,
     deleted: { type: Boolean, default: false, select: false }
 })
 
