@@ -132,12 +132,12 @@ router.delete('/departments', async (req, res) => {
 //----------------------------- LEAVES -----------------------------
 
 router.get('/leaves', async (req, res) => {
-    const leaves = await MODELS.Leave.find()
+    const leaves = await MODELS.Leave.find().populate('user').populate('substitute')
     res.status(200).send(leaves)
 })
 router.post('/leaves', async (req, res) => {
     const departmentData = req.body
-    const leave = await MODELS.Leave.create(departmentData)
+    const leave = await MODELS.Leave.create(departmentData).populate('user').populate('substitute')
     res.status(200).send(leave)
 })
 router.post('/leaves/update', async (req, res) => {
