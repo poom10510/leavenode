@@ -34,8 +34,8 @@ export const create = async(req, res) => {
     const infos = Joi.validate(req.body, schema).value
     const { lineid } = req.body
     try {
-        const infos = await Lineinfo.findOne({ deleted: false, lineid })
-        if (infos) {
+        const checkinfos = await Lineinfo.findOne({ deleted: false, lineid })
+        if (checkinfos) {
             respondResult(res)({ errortext: "lineid exist" })
         } else {
             const newLine = await Lineinfo.create(infos)
