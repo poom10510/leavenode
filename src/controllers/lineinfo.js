@@ -80,7 +80,7 @@ export const findBylineId = async(req, res) => {
     try {
         const { lineid } = req.body
             //const infos = await Lineinfo.findOne({ deleted: false, lineid })
-        const infos = await Lineinfo.find({ deleted: false, lineid })
+        const infos = await Lineinfo.find({ deleted: false, lineid: lineid })
 
         respondResult(res)(infos)
     } catch (err) {
