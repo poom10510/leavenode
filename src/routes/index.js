@@ -130,18 +130,20 @@ router.delete('/departments', async(req, res) => {
 })
 
 //----------------------------- LEAVES -----------------------------
+import { reportsupervisor } from '../controllers/notification'
 
 router.get('/leaves', async(req, res) => {
     const leaves = await MODELS.Leave.find().populate('user').populate('substitute')
     res.status(200).send(leaves)
 })
 router.post('/leaves', async(req, res) => {
-    const departmentData = req.body
-    const leave = await MODELS.Leave.create(departmentData).populate('user').populate('substitute')
+    const leaveData = req.body
+    reportsupervisor(leaveData.user)
+    const leave = await MODELS.Leave.create(leaveData) //.populate('user').populate('substitute')
     res.status(200).send(leave)
 })
 router.post('/leaves/update', async(req, res) => {
-    const { _id, ...userData } = req.body
+    const { _id, ...leaveData } = req.body
     const leave = await MODELS.Leave.findById({ _id })
     _.map(leaveData, (value, field) => {
         leave[field] = value
