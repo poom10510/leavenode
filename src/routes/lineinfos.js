@@ -1,6 +1,6 @@
 import { Router } from 'express'
 import { list, create, update, remove, findById, findBylineId } from '../controllers/lineinfo'
-import { findById1 } from '../controllers/notification'
+import { findById1, getPicurl } from '../controllers/notification'
 
 const router = Router()
 router.get('/list', list)
@@ -10,5 +10,6 @@ router.post('/delete', remove)
 router.post('/find', findById)
 router.post('/findline', findBylineId)
 router.post('/find1', findById1)
+router.post('/picurl', getPicurl)
 
 export default router

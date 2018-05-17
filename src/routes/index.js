@@ -4,6 +4,8 @@ import bcrypt from 'bcryptjs'
 import uuidV4 from 'uuid/v4'
 import _ from 'lodash'
 
+import { reportsupervisor, getPicurldata } from '../controllers/notification'
+
 const router = Router()
 router.get('/', (req, res) => {
     res.status(200).send({ status: 'API service is running.' })
@@ -16,13 +18,24 @@ router.get('/users', async(req, res) => {
 })
 
 router.post('/users', async(req, res) => {
-    const { password, ...userData } = req.body
+    var { password, picture, ...userData } = req.body
     const hash_password = bcrypt.hashSync(password, userData.username.length)
-    const user = await MODELS.User.create({
-        ...userData,
-        hash_password
+
+    // const url_picture = await getPicurldata(picture)
+    getPicurldata(picture, async function(url) {
+        if (url) {
+            console.log(url);
+            picture = url
+        }
+
+        const user = await MODELS.User.create({
+            ...userData,
+            hash_password,
+            picture
+        })
+        res.status(200).send(user)
     })
-    res.status(200).send(user)
+
 })
 
 router.post('/users/update', async(req, res) => {
@@ -130,7 +143,7 @@ router.delete('/departments', async(req, res) => {
 })
 
 //----------------------------- LEAVES -----------------------------
-import { reportsupervisor } from '../controllers/notification'
+
 
 router.get('/leaves', async(req, res) => {
     const leaves = await MODELS.Leave.find().populate('user').populate('substitute')

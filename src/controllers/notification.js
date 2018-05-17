@@ -5,6 +5,7 @@ import User from '../models/user'
 import Lineinfo from '../models/lineinfo'
 
 const request = require('request')
+var cloudinary = require('cloudinary');
 
 export const findById1 = async(req, res) => {
     try {
@@ -125,3 +126,73 @@ async function reportsupervisor(userid) {
 
 }
 module.exports.reportsupervisor = reportsupervisor;
+
+cloudinary.config({
+    cloud_name: 'kitipoom-kasetsart',
+    api_key: '154731877182697',
+    api_secret: 'cpeHFWDCYXKx_Kh54EdlgjUsjAM'
+});
+
+export const getPicurl = async(req, res) => {
+    try {
+        const { data } = req.body
+            // uploadPicture(data, function(resdata) {
+            //     respondResult(res)(resdata)
+            // })
+        var resdata = await uploadPicture2(data)
+        respondResult(res)(resdata)
+
+    } catch (err) {
+        respondErrors(res)(err)
+    }
+}
+
+export const getPicurldata = async(data, callback) => {
+    try {
+        console.log("start");
+        // var resdata = await uploadPicture2(data)
+        // console.log("get!");
+        // console.log(resdata);
+
+        // return resdata
+        uploadPicture(data, function(resdata) {
+            console.log("get!");
+            console.log(resdata);
+
+            //return resdata
+            callback(resdata.url)
+        })
+
+    } catch (err) {
+        //return null;
+        callback(null)
+    }
+}
+
+function uploadPicture(data, callback) {
+    cloudinary.uploader.upload(data, function(error, result) {
+        if (error) {
+            console.log(error)
+            callback(error);
+        } else {
+            console.log(result)
+            callback(result);
+        }
+
+    });
+}
+
+function uploadPicture2(data) {
+    return new Promise(function(sucess, rejected) {
+        cloudinary.uploader.upload(data, function(error, result) {
+            if (error) {
+                console.log(error)
+                rejected(error);
+            } else {
+                console.log(result)
+                sucess(result);
+            }
+
+        });
+    })
+}
