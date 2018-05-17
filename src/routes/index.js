@@ -20,21 +20,29 @@ router.get('/users', async(req, res) => {
 router.post('/users', async(req, res) => {
     var { password, picture, ...userData } = req.body
     const hash_password = bcrypt.hashSync(password, userData.username.length)
+        // const url_picture = await getPicurldata(picture)
+    if (picture) {
+        getPicurldata(picture, async function(url) {
+            if (url) {
+                console.log(url);
+                picture = url
+            }
 
-    // const url_picture = await getPicurldata(picture)
-    getPicurldata(picture, async function(url) {
-        if (url) {
-            console.log(url);
-            picture = url
-        }
-
+            const user = await MODELS.User.create({
+                ...userData,
+                hash_password,
+                picture
+            })
+            res.status(200).send(user)
+        })
+    } else {
         const user = await MODELS.User.create({
             ...userData,
-            hash_password,
-            picture
+            hash_password
         })
         res.status(200).send(user)
-    })
+    }
+
 
 })
 
